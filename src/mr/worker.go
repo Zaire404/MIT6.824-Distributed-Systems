@@ -136,10 +136,10 @@ func Worker(mapf func(string, string) []KeyValue,
 						break
 					}
 				}
-				fmt.Println("j = ", j)
 				for ; i < j; i++ {
 					values = append(values, intermediate[i].Value)
 				}
+				i--
 				output := reducef(intermediate[i].Key, values)
 				fmt.Fprintf(ofile, "%v %v\n", intermediate[i].Key, output)
 			}

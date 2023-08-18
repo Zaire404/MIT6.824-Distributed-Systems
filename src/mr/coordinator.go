@@ -1,7 +1,6 @@
 package mr
 
 import (
-	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -46,7 +45,6 @@ func (c *Coordinator) ReceiveFinishedReduce(args *WorkerArgs, reply *WorkerReply
 }
 
 func (c *Coordinator) AllocateTask(args *WorkerArgs, reply *WorkerReply) error {
-	fmt.Println("mapFinished : ", c.mapFinished, "  reduceFinished : ", c.reduceFinished)
 	if c.mapFinished < c.nMap {
 		allocateID := -1
 		for i := 0; i < c.nMap; i++ {
