@@ -18,6 +18,8 @@ for i in $(seq 1 $runs); do
     if ! wait $pid; then
         echo '***' FAILED TESTS IN TRIAL $i
         exit 1
+    else 
+        echo '***' PASSED TESTS IN TRIAL $i
     fi
 done
 echo '***' PASSED ALL $i TESTING TRIALS
