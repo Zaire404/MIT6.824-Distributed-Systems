@@ -81,10 +81,14 @@ func Worker(mapf func(string, string) []KeyValue,
 				oname := fmt.Sprintf("mr-%d-%d", reply.TaskID, i)
 				// oname := "mr-" + strconv.Itoa(reply.TaskID) + "-" + strconv.Itoa(i)
 				ofile, err := ioutil.TempFile("", "mr-tmp*")
-				defer ofile.Close()
 				if err != nil {
 					log.Fatalf("cannot create temp file")
 				}
+				defer func() {
+					if err := ofile.Close(); err != nil {
+						log.Fatalf("error closing file: %v", err)
+					}
+				}()
 				enc := json.NewEncoder(ofile)
 				for _, kv := range buckets[i] {
 					err := enc.Encode(&kv)
@@ -108,10 +112,14 @@ func Worker(mapf func(string, string) []KeyValue,
 			for i := 0; i < reply.NMap; i++ {
 				iname := "mr-" + strconv.Itoa(i) + "-" + strconv.Itoa(reply.TaskID)
 				file, err := os.Open(iname)
-				defer file.Close()
 				if err != nil {
 					log.Fatalf("cannot open %v", file)
 				}
+				defer func() {
+					if err := file.Close(); err != nil {
+						log.Fatalf("error closing file: %v", err)
+					}
+				}()
 				dec := json.NewDecoder(file)
 				for {
 					var kv KeyValue
